@@ -1,0 +1,6 @@
+[submodule ".janus/vim-autoformat-rails"]
+	path = .janus/vim-autoformat-rails
+	url = git@github.com:KurtPreston/vim-autoformat-rails.git
+[submodule ".janus/vim-indent-guides"]
+	path = .janus/vim-indent-guides
+	url = git@github.com:nathanaelkane/vim-indent-guides.git
