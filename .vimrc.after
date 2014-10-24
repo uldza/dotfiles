@@ -1,0 +1,127 @@
+" make Python follow PEP8 ( http://www.python.org/dev/peps/pep-0008/ )
+au Bufread,BufNewFile *.as set filetype=actionscript
+
+au FileType python set softtabstop=4 tabstop=4 shiftwidth=4 textwidth=79
+au FileType php set softtabstop=4 tabstop=4 shiftwidth=4
+au FileType smarty set softtabstop=4 tabstop=4 shiftwidth=4
+au FileType javascript set softtabstop=4 tabstop=4 shiftwidth=4
+au FileType ruby set softtabstop=2 tabstop=2 shiftwidth=2
+
+au FileType actionscript set softtabstop=4 tabstop=4 shiftwidth=4 noexpandtab noendofline
+set t_Co=256
+
+" Default gui color scheme
+color desert256
+
+set guifont=DejaVu:h13
+set guioptions=aAce
+set wrap
+
+" ruby files settings
+augroup filetype_ruby
+  if has("balloon_eval")
+    " Annoying plugins keep turning ballooneval on
+    autocmd BufEnter *.rb setlocal noballooneval
+  endif
+augroup END
+
+if has("gui_macvim")
+  set transparency=7
+  " Allow to select multiple lines with shift
+  let macvim_hig_shift_movement = 1
+
+  color desert
+
+  " Don't beep
+  set visualbell
+
+  " Start without the toolbar
+  set guioptions-=T
+
+  let g:ctrlp_regexp = 1
+
+  let g:ctrlp_abbrev = {
+  \ 'gmode': 't',
+  \ 'abbrevs': [
+  \ {
+  \ 'pattern': ' ',
+  \ 'expanded': '.*',
+  \ 'mode': 'pfrz',
+  \ }
+  \ ]
+  \ }
+
+  let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](files|coverage|tmp|shared\/cache|shared\/3rdpart|rdoc|doc)$',
+  \ 'file': '\v\.(jpg|png|gif|db|DS_Store|ico)$',
+  \ }
+
+  " for ctrlp plugin to open selection in new tab
+  let g:ctrlp_prompt_mappings = {
+    \ 'AcceptSelection("e")': [],
+    \ 'AcceptSelection("t")': ['<cr>', '<c-m>'],
+    \ }
+
+  " if file is already opened jump to it
+  let g:ctrlp_jump_to_buffer = 2
+endif
+
+" disable copy on select
+set go-=a
+
+set hidden
+set ignorecase
+set smartcase
+
+" Add Git info to status line
+set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+
+" Some extra files to ignore for command-t and autocomplete
+set wildignore+=log/**
+set wildignore+=tmp/**
+set wildignore+=vendor/cache/**
+
+" Sort tags by name
+let Tlist_Sort_Type = "name"
+let Tlist_WinWidth = 40
+
+let g:indent_guides_start_level = 3
+let g:indent_guides_guide_size = 1
+
+function! PromptRemoveTrainingWhitespace()
+  " only ask for given file types
+  "let promt_for_file_types = ['ruby', 'vim']
+  "if index(promt_for_file_types, &ft) == -1
+    "return
+  "end
+ 
+  let has_trailing_spaces=!!search('\v\s+$', 'cwn')
+  if has_trailing_spaces
+    if ! exists("b:remove_trailing_whitespace")
+      let has_trailing_spaces=!!search('\v\s+$', 'cwn')
+      if has_trailing_spaces
+        let choice = confirm("Remove trailing whitespace?", "&Yes\n&No")
+        if choice == 1
+          call Trim()
+          let b:remove_trailing_whitespace = 1
+        else
+          let b:remove_trailing_whitespace = 0
+        endif
+      endif
+    elseif b:remove_trailing_whitespace == 1
+      call Trim()
+    endif
+  endif
+endfunction
+ 
+function! Trim()
+  let cur_linenr = line('.')
+  let cur_col = col('.')
+  let _s=@/
+  %s/\s\+$//e
+  let @/=_s
+  nohl
+  call cursor(cur_linenr, cur_col)
+endfunction
+ 
+autocmd BufWritePre * call PromptRemoveTrainingWhitespace()

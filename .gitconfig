@@ -1,0 +1,22 @@
+[user]
+	name = uldis
+	email = uldis@cubesystems.lv
+[difftool "Kaleidoscope"]
+[difftool]
+[diff]
+[github]
+	user = uldza
+	;token = 
+[difftool "Kaleidoscope"]
+	cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
+[difftool]
+	prompt = false
+[diff]
+  tool = Kaleidoscope
+[color]
+	ui = true
+[core]
+  excludesfile = /Users/uldis/.gitignore_global
+  editor = vim
+[push]
+	default = simple
