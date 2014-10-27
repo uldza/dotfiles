@@ -125,3 +125,11 @@ function! Trim()
 endfunction
  
 autocmd BufWritePre * call PromptRemoveTrainingWhitespace()
+" regenerate CTAGS with ripper-tags
+map <Leader>rg :!ripper-tags -R --exclude=vendor
+
+" Zeal docs
+nmap <leader>z :!zeal --query "<cword>" &> /dev/null &<CR><CR>
+
+" Rubocop fix current file
+nmap <leader>rc :!rubocop -a %<CR>
